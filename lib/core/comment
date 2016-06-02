@@ -1,3 +1,20 @@
 #!/usr/bin/env ruby
 
-puts Dir.glob("*[-]*.yml")
+require 'getoptlong'
+
+opts = GetoptLong.new(
+    ['--id' , '-i', GetoptLong::OPTIONAL_ARGUMENT]
+)
+
+if ARGV.length == 0
+    puts Dir.glob("*[-]*.yml")
+end
+
+opts.each do |opt, arg|
+    case opt
+    when '--id'
+        puts Dir.glob("#{arg}[-]*.yml")
+    else
+        puts Dir.glob("*[-]*.yml")
+    end
+end
