@@ -1,0 +1,10 @@
+---
+# 1.yml
+type: "issue"
+id: "1"
+title: "Some Issue"
+created_by: kyle
+created: 20160602110000
+last_updated: 20160602110200
+content: "There is a problem with..."
+status: "open"
