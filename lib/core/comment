@@ -6,15 +6,13 @@ opts = GetoptLong.new(
     ['--issue' , '-i', GetoptLong::OPTIONAL_ARGUMENT]
 )
 
-if ARGV.length == 0
+if ARGV.empty?
     puts Dir.glob("*[-]*.yml")
 end
 
 opts.each do |opt, arg|
     case opt
-    when '--id'
+    when '--issue'
         puts Dir.glob("#{arg}[-]*.yml")
-    else
-        puts Dir.glob("*[-]*.yml")
     end
 end
