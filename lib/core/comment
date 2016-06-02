@@ -3,7 +3,7 @@
 require 'getoptlong'
 
 opts = GetoptLong.new(
-    ['--id' , '-i', GetoptLong::OPTIONAL_ARGUMENT]
+    ['--issue' , '-i', GetoptLong::OPTIONAL_ARGUMENT]
 )
 
 if ARGV.length == 0
