@@ -21,3 +21,6 @@ module ParseYAML
 
 end
 
+include ParseYAML
+
+parseIssues
