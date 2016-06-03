@@ -11,12 +11,21 @@ module Core
     end
 
     def assets(working_dir = '.')
+
       repo = open(working_dir)
-      lib = Git::Lib.new(repo)
-      currentBranch = lib.branch_current
-      lib.checkout('issue')
+
+      currentBranch = repo.lib.branch_current # keep branch, so we can switch back
+      repo.lib.checkout('issue')
+
+      puts "Issues"
+      puts "----------------"
       puts Issue.all
-      lib.checkout(currentBranch)
+
+      puts "Comments"
+      puts "----------------"
+      puts Comment.all
+
+      repo.lib.checkout(currentBranch)
     end
 
   end
