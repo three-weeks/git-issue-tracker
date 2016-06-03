@@ -2,7 +2,7 @@ module Issue
   extend self
 
   def delete(id)
-    File.delete(id) if isIssue(id)
+    File.delete("#{id}.yml") if isIssue(id)
   end
 
   def isIssue(id)
