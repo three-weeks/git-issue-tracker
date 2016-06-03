@@ -1,5 +1,6 @@
 require 'git'
 require_relative "Issue"
+require_relative "Comment"
 
 module Core
 
@@ -7,7 +8,7 @@ module Core
     extend self
 
     def open(working_dir = nil)
-      repo = Git.open(working_dir)
+      Git.open(working_dir)
     end
 
     def assets(working_dir = '.')
@@ -31,6 +32,3 @@ module Core
   end
 end
 
-include Core::Repo
-
-Core::Repo.assets
