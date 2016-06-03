@@ -23,16 +23,18 @@ module Core
         repo.lib.checkout('issue')
       end
 
+      puts "\n----------------"
       puts "Issues"
       puts "----------------"
       puts Issue.all
+      puts
 
       puts "Comments"
       puts "----------------"
       puts Comment.all
 
       repo.lib.checkout(currentBranch)
-      repo.lib.stash_apply('stack{0}')
+      repo.lib.stash_apply('stash@{0}')
     end
 
   end
