@@ -16,7 +16,12 @@ module Core
       repo = open(working_dir)
 
       currentBranch = repo.lib.branch_current # keep branch, so we can switch back
-      repo.lib.checkout('issue')
+      if repo.status.changed == {}
+        repo.lib.checkout('issue')
+      else
+        repo.lib.stash_save('issue_temp')
+        repo.lib.checkout('issue')
+      end
 
       puts "Issues"
       puts "----------------"
@@ -27,6 +32,7 @@ module Core
       puts Comment.all
 
       repo.lib.checkout(currentBranch)
+      repo.lib.stash_apply('stack{0}')
     end
 
   end

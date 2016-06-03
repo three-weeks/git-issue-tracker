@@ -9,7 +9,7 @@ class TestRepo < Test::Unit::TestCase
 	end
 
   def test_assets
-
+    Core::Repo.assets('.')
   end
 
 end
