@@ -1,5 +1,5 @@
 require 'git'
-require 'issue'
+require_relative "Issue"
 
 module Core
 
