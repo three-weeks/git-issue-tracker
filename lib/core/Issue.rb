@@ -1,6 +1,14 @@
 module Issue
   extend self
 
+  def delete(id)
+    File.delete(id) if isIssue(id)
+  end
+
+  def isIssue(id)
+    !(/[-]/ =~ id)
+  end
+
   def all
     Dir.glob("[0-9]{1,}.yml")
   end
