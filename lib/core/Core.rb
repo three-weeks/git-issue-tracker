@@ -1,4 +1,5 @@
 require 'git'
+require 'yaml'
 require_relative "Issue"
 require_relative "Comment"
 
@@ -36,15 +37,34 @@ module Core
         repo.lib.checkout('issue')
       end
 
-      puts "\n----------------"
+      puts
+      puts "----------------"
       puts "Issues"
       puts "----------------"
-      puts Issue.all
+
+      Issue.all.each do |file|
+        puts
+        yml =  YAML.parse_file(file)
+        yml.to_ruby.each do |key, value|
+          puts "#{key}: #{value}"
+        end
+      end
+
+      puts
+      puts "***************"
       puts
 
+      puts "----------------"
       puts "Comments"
       puts "----------------"
-      puts Comment.all
+
+      Comment.all.each do |file|
+        puts
+        yml =  YAML.parse_file(file)
+        yml.to_ruby.each do |key, value|
+          puts "#{key}: #{value}"
+        end
+      end
 
       repo.lib.checkout(currentBranch)
       repo.lib.stash_pop('stash@{0}') unless repo_changed == false
