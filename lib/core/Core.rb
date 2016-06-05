@@ -27,10 +27,12 @@ module Core
       repo.lib.extend(AdditionalMethods)
 
       currentBranch = repo.lib.branch_current # keep branch, so we can switch back
-      if repo.status.changed == {}
+      repo_changed = repo.status.changed != {}
+
+      if repo_changed
+        repo.lib.stash_save('issue_temp')
         repo.lib.checkout('issue')
       else
-        repo.lib.stash_save('issue_temp')
         repo.lib.checkout('issue')
       end
 
@@ -45,9 +47,9 @@ module Core
       puts Comment.all
 
       repo.lib.checkout(currentBranch)
-      repo.lib.stash_pop('stash@{0}')
-    end
+      repo.lib.stash_pop('stash@{0}') unless repo_changed == false
 
+    end
   end
 end
 
