@@ -15,39 +15,75 @@ end
 
 module Core
 
-  module Repo
+  module Lib
     extend self
 
     def open(working_dir = nil)
       Git.open(working_dir)
     end
 
-    def assets(working_dir = '.')
-
-      repo = open(working_dir)
-      repo.lib.extend(AdditionalMethods)
-
-      currentBranch = repo.lib.branch_current # keep branch, so we can switch back
+    def repo_changed?(repo)
       repo_changed = repo.status.changed != {}
+    end
 
-      if repo_changed
+    def open_issue_branch(repo)
+      @savedBranch = repo.lib.branch_current # keep branch, so we can switch back
+      if repo_changed?(repo)
         repo.lib.stash_save('issue_temp')
         repo.lib.checkout('issue')
       else
         repo.lib.checkout('issue')
       end
+    end
+
+    def close_issue_branch(repo)
+      repo.lib.extend(AdditionalMethods)
+      repo.lib.checkout(@savedBranch)
+      repo.lib.stash_pop('stash@{0}') unless repo_changed?(repo)
+    end
+
+    def all_issues(repo)
+      open_issue_branch(repo)
+
+      files = Issue.all
+      issues = []
+      files.each do |file|
+        yml = YAML.parse_file(file)
+        issues.push(yml.to_ruby)
+      end
+
+      close_issue_branch(repo)
+      return issues
+    end
+
+    def all_comments(repo)
+      open_issue_branch(repo)
+
+      files = Comment.all
+      comments = []
+      files.each do |file|
+        yml = YAML.parse_file(file)
+        comments.push(yml.to_ruby)
+      end
+
+      close_issue_branch(repo)
+      return comments
+    end
+
+    def test_display(repo)
 
       puts
       puts "----------------"
       puts "Issues"
       puts "----------------"
 
-      Issue.all.each do |file|
-        puts
-        yml =  YAML.parse_file(file)
-        yml.to_ruby.each do |key, value|
+      issues = all_issues(repo)
+
+      issues.each do |issue|
+        issue.each do |key, value|
           puts "#{key}: #{value}"
         end
+        puts
       end
 
       puts
@@ -58,16 +94,14 @@ module Core
       puts "Comments"
       puts "----------------"
 
-      Comment.all.each do |file|
-        puts
-        yml =  YAML.parse_file(file)
-        yml.to_ruby.each do |key, value|
+      comments = all_comments(repo)
+
+      comments.each do |comment|
+        comment.each do |key, value|
           puts "#{key}: #{value}"
         end
+        puts
       end
-
-      repo.lib.checkout(currentBranch)
-      repo.lib.stash_pop('stash@{0}') unless repo_changed == false
 
     end
   end

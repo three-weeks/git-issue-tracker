@@ -1,15 +1,16 @@
 require_relative "../lib/core/Core"
 require "test/unit"
 
-class TestRepo < Test::Unit::TestCase
+class TestLib < Test::Unit::TestCase
 
 	def test_repo
-    repo = Core::Repo.open('.')
+    repo = Core::Lib.open('.')
     assert_equal(Git::Base, repo.class)
 	end
 
   def test_assets
-    Core::Repo.assets('.')
+    repo = Core::Lib.open('.')
+    Core::Lib.test_display(repo)
   end
 
 end
